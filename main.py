@@ -2,17 +2,23 @@ from mcp.server.fastmcp import FastMCP
 import ctypes
 
 mcp = FastMCP("FocusTool")
+lib = ctypes.CDLL('C:\\project\\FOCUS\\build\\x64-Debug\\bin/engine.dll')
 
-@mcp.tool()
+@mcp.tool(name="runEngine")
+def runEngine():
+    """run FOCUS engine"""
+    lib.run()
 
-def focusFunc():
-    """focus function test"""
-    lib = ctypes.CDLL('C:\\project\\FOCUS\\build\\x64-Debug\\bin/engine.dll')
-    lib.getSceneObjCount.restype = int
-    #lib.getSceneObjCount.argtypes = [ctypes.c_int]
-    res = lib.getSceneObjCount()
-    print(res)
-    return res
+@mcp.tool(name="countObj")
+def countObj():
+    """count obj sums in FOCUS engine"""
+    lib.getSceneObjCount.restype = ctypes.c_int
+    return lib.getSceneObjCount()
+
+@mcp.tool(name="plantObj")
+def countObj():
+    """plant obj in FOCUS engine"""
+    lib.plantObj()
 
 if __name__ == "__main__":
     mcp.run(transport='stdio')
